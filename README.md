@@ -177,7 +177,7 @@ FCFS avg waiting time → 17.0   (matches OS textbook reference value)
 SJF  avg waiting time →  3.0   (matches OS textbook reference value)
 ```
 
-## Extra features implemented (beyond the base spec)
+## Extra features implemented 
 
 - ✅ **SRTF** (preemptive SJF) as a benchmark algorithm
 - ✅ **Starvation detection**, comparing against the relevant
