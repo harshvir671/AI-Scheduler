@@ -13,6 +13,9 @@ Process Generator → Scheduler Engine → Metrics Collector → ML Model → AI
 
 ---
 
+Live Demo: https://ai-scheduler-r0ct.onrender.com/
+(may take ~30s to load on first visit — free tier hosting)
+
 ## What's actually in here
 
 - **5 scheduling algorithms**, not 4: FCFS, SJF (non-preemptive), **SRTF**
@@ -205,5 +208,4 @@ SJF  avg waiting time →  3.0   (matches OS textbook reference value)
 | Training plots | Matplotlib |
 
 
-Live Demo: https://ai-scheduler-r0ct.onrender.com/
-(may take ~30s to load on first visit — free tier hosting)
+
