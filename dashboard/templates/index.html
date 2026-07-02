@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sched.ai — AI-Powered CPU Scheduler</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="scanline-overlay"></div>
+
+<header class="topbar">
+  <div class="topbar-left">
+    <span class="logo">sched<span class="logo-accent">.ai</span></span>
+    <span class="logo-sub">// AI-Powered CPU Process Scheduler</span>
+  </div>
+  <div class="topbar-right">
+    <span class="status-dot" id="model-status-dot"></span>
+    <span id="model-status-text">checking model…</span>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- ============ CONTROL PANEL ============ -->
+  <section class="panel control-panel">
+    <div class="panel-head"><span class="tag">01</span> WORKLOAD GENERATOR</div>
+    <div class="panel-body">
+      <div class="field-row">
+        <label for="num-processes">Processes</label>
+        <input type="number" id="num-processes" value="12" min="2" max="60">
+      </div>
+      <div class="field-row">
+        <label for="max-burst">Max burst</label>
+        <input type="number" id="max-burst" value="20" min="1" max="80">
+      </div>
+      <div class="field-row">
+        <label for="max-arrival">Max arrival</label>
+        <input type="number" id="max-arrival" value="24" min="1" max="200">
+      </div>
+      <div class="field-row">
+        <label for="max-priority">Max priority</label>
+        <input type="number" id="max-priority" value="5" min="2" max="10">
+      </div>
+      <div class="field-row">
+        <label for="rr-quantum">RR quantum</label>
+        <input type="number" id="rr-quantum" value="4" min="1" max="20">
+      </div>
+      <div class="field-row checkbox-row">
+        <label for="use-aging">Priority aging</label>
+        <input type="checkbox" id="use-aging">
+      </div>
+      <div class="field-row">
+        <label for="seed-input">Seed (optional)</label>
+        <input type="text" id="seed-input" placeholder="random">
+      </div>
+
+      <button class="btn btn-primary" id="btn-generate">▸ GENERATE WORKLOAD</button>
+      <button class="btn btn-secondary" id="btn-resimulate" disabled>↻ RE-RUN SIMULATION</button>
+
+      <div class="process-table-wrap">
+        <table class="process-table" id="process-table">
+          <thead>
+            <tr><th>PID</th><th>Arr</th><th>Burst</th><th>Pri</th><th>Mem</th></tr>
+          </thead>
+          <tbody id="process-table-body">
+            <tr><td colspan="5" class="empty-row">no workload generated yet</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AI DECISION ENGINE ============ -->
+  <section class="panel ai-panel" id="ai-panel">
+    <div class="panel-head"><span class="tag">02</span> AI DECISION ENGINE</div>
+    <div class="panel-body">
+      <div class="ai-empty" id="ai-empty">
+        Generate a workload to get an AI scheduling recommendation.
+      </div>
+      <div class="ai-result hidden" id="ai-result">
+        <div class="ai-recommend-line">
+          <span class="ai-label">RECOMMENDED SCHEDULER</span>
+          <span class="ai-algo" id="ai-algo-name">—</span>
+        </div>
+        <div class="confidence-row">
+          <div class="confidence-bar-track">
+            <div class="confidence-bar-fill" id="confidence-bar-fill"></div>
+          </div>
+          <span class="confidence-pct" id="confidence-pct">0%</span>
+        </div>
+        <div class="ai-probs" id="ai-probs"></div>
+        <div class="ai-verdict" id="ai-verdict"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ METRICS COMPARISON ============ -->
+  <section class="panel metrics-panel">
+    <div class="panel-head"><span class="tag">03</span> METRICS COMPARISON</div>
+    <div class="panel-body">
+      <table class="metrics-table" id="metrics-table">
+        <thead>
+          <tr>
+            <th>Algorithm</th>
+            <th>Avg Wait</th>
+            <th>Avg Turnaround</th>
+            <th>Avg Response</th>
+            <th>CPU Util</th>
+          </tr>
+        </thead>
+        <tbody id="metrics-table-body">
+          <tr><td colspan="5" class="empty-row">no data yet</td></tr>
+        </tbody>
+      </table>
+      <div class="chart-wrap">
+        <canvas id="metrics-chart" height="160"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GANTT CHARTS ============ -->
+  <section class="panel gantt-panel">
+    <div class="panel-head"><span class="tag">04</span> GANTT CHARTS</div>
+    <div class="panel-body">
+      <div class="gantt-tabs" id="gantt-tabs"></div>
+      <div class="gantt-scroll" id="gantt-container">
+        <div class="empty-row">run a simulation to see scheduling timelines</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STARVATION / FAIRNESS ============ -->
+  <section class="panel starvation-panel">
+    <div class="panel-head"><span class="tag">05</span> STARVATION DETECTION <span class="subtitle">(Priority scheduling)</span></div>
+    <div class="panel-body" id="starvation-body">
+      <div class="empty-row">no data yet</div>
+    </div>
+  </section>
+
+  <!-- ============ MODEL INFO ============ -->
+  <section class="panel model-panel">
+    <div class="panel-head"><span class="tag">06</span> MODEL DIAGNOSTICS</div>
+    <div class="panel-body" id="model-info-body">
+      <div class="empty-row">loading model metrics…</div>
+    </div>
+  </section>
+
+  <!-- ============ PREDICTION HISTORY ============ -->
+  <section class="panel history-panel">
+    <div class="panel-head"><span class="tag">07</span> PREDICTION TRACK RECORD</div>
+    <div class="panel-body">
+      <div class="history-summary" id="history-summary">no runs logged yet</div>
+      <div class="history-list" id="history-list"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  AI-Scheduler · FCFS · SJF · SRTF · Round Robin · Priority(+Aging) · RandomForest decision engine
+</footer>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

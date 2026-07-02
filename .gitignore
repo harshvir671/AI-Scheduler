@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+data/history.sqlite3
+.venv/
+venv/
+*.egg-info/

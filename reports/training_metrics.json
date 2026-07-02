@@ -1,0 +1,99 @@
+{
+  "test_accuracy": 0.8075,
+  "macro_f1": 0.5990358373667686,
+  "weighted_f1": 0.8363309758797396,
+  "cv_accuracy_mean": 0.813,
+  "cv_accuracy_std": 0.015224363697705098,
+  "classes": [
+    "FCFS",
+    "Priority",
+    "RR",
+    "SJF"
+  ],
+  "confusion_matrix": [
+    [
+      12,
+      1,
+      0,
+      21
+    ],
+    [
+      5,
+      63,
+      0,
+      20
+    ],
+    [
+      2,
+      0,
+      225,
+      1
+    ],
+    [
+      78,
+      140,
+      40,
+      992
+    ]
+  ],
+  "classification_report": {
+    "FCFS": {
+      "precision": 0.12371134020618557,
+      "recall": 0.35294117647058826,
+      "f1-score": 0.183206106870229,
+      "support": 34.0
+    },
+    "Priority": {
+      "precision": 0.3088235294117647,
+      "recall": 0.7159090909090909,
+      "f1-score": 0.4315068493150685,
+      "support": 88.0
+    },
+    "RR": {
+      "precision": 0.8490566037735849,
+      "recall": 0.9868421052631579,
+      "f1-score": 0.9127789046653144,
+      "support": 228.0
+    },
+    "SJF": {
+      "precision": 0.9593810444874274,
+      "recall": 0.7936,
+      "f1-score": 0.8686514886164624,
+      "support": 1250.0
+    },
+    "accuracy": 0.8075,
+    "macro avg": {
+      "precision": 0.5602431294697406,
+      "recall": 0.7123230931607093,
+      "f1-score": 0.5990358373667686,
+      "support": 1600.0
+    },
+    "weighted avg": {
+      "precision": 0.890121167140567,
+      "recall": 0.8075,
+      "f1-score": 0.8363309758797396,
+      "support": 1600.0
+    }
+  },
+  "feature_importances": {
+    "max_burst": 0.1562488190574297,
+    "burst_variance": 0.15056261707585272,
+    "avg_priority": 0.14032732867858294,
+    "avg_burst": 0.11812241842032853,
+    "cpu_load_estimate": 0.09248008658306484,
+    "min_burst": 0.08434742352994662,
+    "avg_arrival_gap": 0.08356498871128588,
+    "priority_variance": 0.07133384546930303,
+    "num_processes": 0.07086044188357231,
+    "avg_memory": 0.03215203059063345
+  },
+  "n_train": 6400,
+  "n_test": 1600,
+  "n_estimators": 300,
+  "class_distribution": {
+    "SJF": 6251,
+    "RR": 1141,
+    "Priority": 437,
+    "FCFS": 171
+  }
+}
