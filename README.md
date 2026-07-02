@@ -28,8 +28,7 @@ Process Generator → Scheduler Engine → Metrics Collector → ML Model → AI
   near-simultaneous arrivals, etc.) so the label space is genuinely
   learnable instead of one algorithm trivially dominating every row.
 - **RandomForestClassifier**, 85.4% test accuracy / 86.6% 5-fold CV
-  accuracy, with full transparency on where it struggles (see
-  [Honest model limitations](#honest-model-limitations) below).
+  accuracy, with full transparency on where it struggles.
 - **A real Flask dashboard** — generate workloads, run every algorithm
   side by side, see live Gantt charts, get the AI's recommendation with
   per-class confidence, and track the AI's prediction history over
@@ -49,14 +48,6 @@ python ml/train.py
 
 # 4. Run the dashboard
 python dashboard/app.py
-# → open http://127.0.0.1:5000
-```
-
-Everything also works headlessly without the dashboard:
-
-```bash
-python -m scheduler.runner     # quick comparison of all algorithms on a sample workload
-python -m ml.predict           # quick AI recommendation on a sample workload
 ```
 
 ## Folder structure
@@ -65,8 +56,8 @@ python -m ml.predict           # quick AI recommendation on a sample workload
 AI-Scheduler/
 │
 ├── data/
-│   ├── workloads.csv          # wide-format: 1 row per workload, all 5 algos' metrics + label
-│   ├── workloads_long.csv     # long-format: 1 row per (workload, algorithm) — matches original spec
+│   ├── workloads.csv          
+│   ├── workloads_long.csv     
 │   └── history.sqlite3        # dashboard prediction-tracking log (created at runtime)
 │
 ├── scheduler/
@@ -137,7 +128,7 @@ This is **not** cheating the metric — it's a more accurate model of how
 scheduler choice actually works in systems design, and it produces a
 genuinely learnable 4-class problem instead of a 1-class one.
 
-## Honest model limitations
+## Model limitations
 
 The final class distribution across 8,000 samples:
 
@@ -200,26 +191,6 @@ SJF  avg waiting time →  3.0   (matches OS textbook reference value)
 - ✅ **Interactive Gantt charts** with per-process color coding and
   hover tooltips, not static images
 
-## Extra features NOT implemented (and why)
-
-The original brief's "stand-out" list includes reinforcement-learning
-scheduling, Docker deployment, multi-core scheduling, and deadlock
-prediction. These were left out deliberately rather than bolted on
-superficially:
-
-- **RL scheduler**: a genuinely good RL formulation (state space,
-  reward shaping for multi-objective wait/turnaround/fairness, training
-  stability) is a project on its own, not a bullet point. A
-  half-working RL agent would be a worse demonstration than no RL
-  agent.
-- **Multi-core / deadlock prediction**: these are different problems
-  (resource allocation graphs, not CPU time-slicing) and bolting them
-  onto a single-CPU scheduler simulator would dilute focus rather than
-  add genuine depth.
-- **Docker**: the project has zero system dependencies beyond
-  `pip install`, so containerization adds packaging overhead without
-  adding capability. Worth doing for a real deployment, not for a
-  demonstration project.
 
 ## Tech stack
 
@@ -233,5 +204,6 @@ superficially:
 | Frontend | Vanilla JS + Canvas (metrics chart), hand-rendered Gantt charts |
 | Training plots | Matplotlib |
 
-No React, no build step, no Docker — runs with `pip install` and
-`python dashboard/app.py`.
+
+Live Demo: https://ai-scheduler-r0ct.onrender.com/
+(may take ~30s to load on first visit — free tier hosting)
